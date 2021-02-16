@@ -1,37 +1,53 @@
 
-public class EmployeeWageUsingMethod {
-	static final int IS_FULL_TIME = 2;
-	static final int EMP_RATE_PER_HOUR = 20;
-	static final int IS_PART_TIME = 1;
-	static final int NUMBER_OF_WORKING_DAYS = 20;
-	static final int MAX_HOURS_IN_MONTH = 100;
-	
-	public static void main(String[] args) {
-		int TotalempWage = CalEmpWage(0,0,0,0,0);
-		System.out.println("Total Emp wage: " + TotalempWage);	
+public class EmployeeWage {
+	private static final int isFullTime = 1;
+	private static final int isPartTime = 2;
+
+	private int numOfCompany=0;
+	private CompanyEmployeeWage[] companyEmpWageArray;
+
+	public EmployeeWage(){
+		companyEmpWageArray = new CompanyEmployeeWage[5];
 	}
-	
-	public static int CalEmpWage(int FinalempWage, int EmpWage, int Totalworkingdays, int EmpHrs, int TotalEmpHrs) {
-		int empHrs=0;
-		int empWage=0;
-		while(TotalEmpHrs <= MAX_HOURS_IN_MONTH && Totalworkingdays < NUMBER_OF_WORKING_DAYS) {
-			Totalworkingdays++;
+
+	public void addCompanyEmpWage(String company, int empRatePerHour, int numbOfCompany, int numOfWorkingDays, int maxHoursPerMonth) {
+	companyEmpWageArray[numOfCompany] = new CompanyEmployeeWage(company,empRatePerHour,numOfWorkingDays,maxHoursPerMonth);
+	computeEmpWage(companyEmpWageArray[numOfCompany].company, companyEmpWageArray[numOfCompany].empRatePerHour,
+			companyEmpWageArray[numOfCompany].numOfWorkingDays ,companyEmpWageArray[numOfCompany].maxHoursPerMonth);
+	numOfCompany++;
+	}
+
+	public static int computeEmpWage(String company, int empRate, int numOfDays, int maxHours){
+		int totalWorkingDays = 0;
+		int totalEmpHrs = 0;
+		int empWage = 0;
+		int totalempWage = 0;
+		while(totalEmpHrs <= maxHours && totalWorkingDays < numOfDays) {
+			totalWorkingDays++;
+			int empHrs=0;
 			int empCheck =(int) Math.floor(Math.random() * 10) % 3;
 			switch (empCheck) {
-				case IS_FULL_TIME:
+				case isFullTime:
 					empHrs=8;
 					break;
-				case IS_PART_TIME:
+				case isPartTime:
 					empHrs=4;
 					break;
 				default:
 					empHrs=0;
 			}
-			TotalEmpHrs +=empHrs;
-			empWage= empHrs * EMP_RATE_PER_HOUR;	
-			System.out.println("Emp wage: " + empWage);
-			FinalempWage +=empWage;
+			totalEmpHrs +=empHrs;
+			empWage = totalEmpHrs * empRate;
+			System.out.println("Employee wage for Day "+totalWorkingDays+" is "+empWage);
+			totalempWage= empWage + totalempWage;
 		}
-		return FinalempWage;	
+		System.out.println("Total Employee wage for Company: " +company+ " is " +totalempWage);
+		return totalempWage;
+	}
+	public static void main(String[] args) {
+	EmployeeWage emp = new EmployeeWage();
+	emp.addCompanyEmpWage("Reliance Digital", 10, 2, 5, 40 );
+	emp.addCompanyEmpWage("D-mart", 10, 3, 8, 30);
 	}
 }
+
